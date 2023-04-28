@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type BuildResult int
@@ -29,6 +30,11 @@ var (
 		"busy":          Busy,
 		"needs_build":   Needs_Build,
 	}
+	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
+	failedStyle       = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("9"))
+	doneStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#04B575"))
+	unusedStyle       = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#3C3C3C"))
+	busyStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#0000FF"))
 )
 
 type project struct {
@@ -50,7 +56,7 @@ func SplitLines(s string) []string {
 func ParseLine(s string) project {
 	words := strings.Fields(s)
 	fmt.Println(words, len(words))
-	c, _ := BuildResultMap[strings.ToLower(words[3])]
+	c, _ := BuildResultMap[strings.ToLower(words[4])]
 	return project{path: words[0], name: words[1], result: c} //,result:matched_result,builddate:ts}
 }
 
@@ -61,7 +67,7 @@ func DeleteProject(path string, needs_reset bool) {
 	arg2 := path
 
 	log.Printf(" %s %s %s %s", app, arg0, arg1, arg2)
-	cmd := exec.Command("/home/sta/projects/elbe/elbe", "control", "del_project", path)
+	cmd := exec.Command("/home/kai/elbe/elbe", "control", "del_project", path)
 	stdout, err := cmd.Output()
 	log.Println(stdout)
 	if err != nil {
@@ -160,7 +166,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+func colorizeBuildResult(p project) string {
+	switch p.result {
+	case Build_Done:
+		return doneStyle.Render("[done]")
+	case Busy:
+		return busyStyle.Render("[busy]")
+	case Build_Failed:
+		return failedStyle.Render("[failed]")
+	case Needs_Build:
+		return unusedStyle.Render("[needs build]")
+	default:
+		return ""
+	}
+
+}
+
 func (m model) View() string {
+	var result = ""
 	// The header
 	s := "Press enter to delete project\n\n"
 
@@ -178,9 +201,9 @@ func (m model) View() string {
 		if _, ok := m.selected[i]; ok {
 			checked = "x" // selected!
 		}
-
+		result = colorizeBuildResult(m.projects[i])
 		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+		s += fmt.Sprintf("%s %s [%s] %s\n", cursor, result, checked, choice)
 	}
 
 	// The footer
@@ -200,7 +223,7 @@ func main() {
 	log.SetOutput(f)
 	log.Println("Starting new session")
 
-	app := "/home/sta/projects/elbe/elbe"
+	app := "/home/kai/elbe/elbe"
 
 	arg0 := "control"
 	arg1 := "list_projects"
@@ -216,7 +239,6 @@ func main() {
 	}
 
 	var projects []project
-
 	s := SplitLines(string(stdout))
 
 	for i, v := range s {
