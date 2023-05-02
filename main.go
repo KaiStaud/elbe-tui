@@ -8,19 +8,33 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type BuildResult int
+type DownloadState int
 
 const (
-	Build_Failed  BuildResult = iota // Read   = 0
-	Build_Done                       // Create = 1
-	Empty_Project                    // Update = 2
-	Busy                             // Delete = 3
-	Needs_Build                      // List   = 4
+	Build_Failed BuildResult = iota // 0
+	Build_Done
+	Empty_Project
+	Busy
+	Needs_Build                          // 4
+	DownloadStarted DownloadState = iota // 5
+	DownloadPathEntered
+	DownloadFinished
 )
+
+type KeyMap struct {
+	Up       key.Binding
+	Down     key.Binding
+	Reset    key.Binding
+	Delete   key.Binding
+	GetFiles key.Binding
+}
 
 var (
 	BuildResultMap = map[string]BuildResult{
@@ -35,12 +49,37 @@ var (
 	doneStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#04B575"))
 	unusedStyle       = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#3C3C3C"))
 	busyStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#0000FF"))
+	DefaultKeyMap     = KeyMap{
+		Up: key.NewBinding(
+			key.WithKeys("k", "up"),        // actual keybindings
+			key.WithHelp("↑/k", "move up"), // corresponding help text
+		),
+		Down: key.NewBinding(
+			key.WithKeys("j", "down"),
+			key.WithHelp("↓/j", "move down"),
+		),
+		Reset: key.NewBinding(
+			key.WithKeys("r", "reset"), // actual keybindings
+			key.WithHelp("r", "reset"), // corresponding help text
+		),
+		Delete: key.NewBinding(
+			key.WithKeys("t", "delete"),
+			key.WithHelp("t", "delete"),
+		),
+		GetFiles: key.NewBinding(
+			key.WithKeys("g", "get_files"),
+			key.WithHelp("g", "get files"),
+		),
+	}
+	elbe_bin    = ""
+	elbe_dl_dir = ""
 )
 
 type project struct {
-	path   string
-	name   string
-	result BuildResult
+	path     string
+	name     string
+	result   BuildResult
+	progress DownloadState
 	//builddate
 }
 
@@ -55,19 +94,23 @@ func SplitLines(s string) []string {
 
 func ParseLine(s string) project {
 	words := strings.Fields(s)
-	fmt.Println(words, len(words))
 	c, _ := BuildResultMap[strings.ToLower(words[4])]
 	return project{path: words[0], name: words[1], result: c} //,result:matched_result,builddate:ts}
 }
 
+type elbe_hook struct {
+	path   string
+	dl_dir string
+}
+
 func DeleteProject(path string, needs_reset bool) {
-	app := "/home/sta/projects/elbe/elbe"
+	app := "/hdd/elbe/elbe"
 	arg0 := "control"
 	arg1 := "del_project"
 	arg2 := path
 
 	log.Printf(" %s %s %s %s", app, arg0, arg1, arg2)
-	cmd := exec.Command("/home/kai/elbe/elbe", "control", "del_project", path)
+	cmd := exec.Command("/hdd/elbe/elbe", "control", "del_project", path)
 	stdout, err := cmd.Output()
 	log.Println(stdout)
 	if err != nil {
@@ -78,42 +121,72 @@ func DeleteProject(path string, needs_reset bool) {
 
 }
 
+func GetFiles(path string, target_dir string) {
+	app := "/hdd/elbe/elbe"
+	arg0 := "control"
+	arg1 := "get_files"
+	arg2 := path
+
+	log.Printf(" %s %s %s %s", app, arg0, arg1, arg2)
+	cmd := exec.Command("/hdd/elbe/elbe", "control", "get_files", "--output", "None", path)
+	stdout, err := cmd.Output()
+	log.Println(stdout)
+	if err != nil {
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return
+	}
+
+}
+
+func ResetProject(path string) {
+	cmd := exec.Command("/hdd/elbe/elbe", "control", "reset_project", path)
+	stdout, err := cmd.Output()
+	log.Println(stdout)
+	if err != nil {
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return
+	}
+}
+
 type model struct {
-	choices    []string         // items on the to-do list
-	cursor     int              // which to-do list item our cursor is pointing at
-	selected   map[int]struct{} // which to-do items are selected
-	projects   []project
-	is_reseted bool
-	is_deleted bool
+	textInput textinput.Model
+	err       error
+	choices   []string
+	selected  map[int]struct{}
+	cursor    int
+	get_it    DownloadState
+	projects  []project
 }
 
 func initialModel(p []project) model {
-
+	ti := textinput.New()
+	ti.Placeholder = "Pikachu"
+	ti.Focus()
+	ti.CharLimit = 156
+	ti.Width = 20
 	var names []string
 	for _, v := range p {
 		names = append(names, v.name)
 	}
-
 	return model{
-		// Our to-do list is a grocery list
-
-		choices:  names,
-		projects: p,
-		// A map which indicates which choices are selected. We're using
-		// the  map like a mathematical set. The keys refer to the indexes
-		// of the `choices` slice, above.
-		selected: make(map[int]struct{}),
+		textInput: ti,
+		err:       nil,
+		choices:   names,
+		selected:  make(map[int]struct{}),
+		projects:  p,
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	// Just return `nil`, which means "no I/O right now, please."
-	return nil
+	return textinput.Blink
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
+	var cmd tea.Cmd
 
+	switch msg := msg.(type) {
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -135,35 +208,42 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor < len(m.choices)-1 {
 				m.cursor++
 			}
+		case "reset", "r":
+			log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
+			ResetProject(m.projects[m.cursor].path)
+			// todo: check for error
+			m.projects[m.cursor].result = Needs_Build
 
-		// The "enter" key and the spacebar (a literal space) toggle
-		// the selected state for the item that the cursor is pointing at.
+		case "get_files", "g":
+			log.Printf("getting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
+			m.projects[m.cursor].progress = DownloadStarted
+			m.get_it = DownloadStarted
+			// todo: check for error
+			// todo: append a "-> <download-path>"
+		case "delete", "t":
+			log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
+			DeleteProject(m.projects[m.cursor].path, false)
+			delete(m.selected, m.cursor)
+
+			i := m.cursor
+			copy(m.choices[i:], m.choices[i+1:])     // Shift a[i+1:] left one index.
+			m.choices[len(m.choices)-1] = ""         // Erase last element (write zero value).
+			m.choices = m.choices[:len(m.choices)-1] // Truncate slice.
+
+			copy(m.projects[i:], m.projects[i+1:])      // Shift a[i+1:] left one index.
+			m.projects[len(m.projects)-1] = project{}   // Erase last element (write zero value).
+			m.projects = m.projects[:len(m.projects)-1] // Truncate slice.
+
+		// Download-Dir entered,switch back to list-view
 		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
-				DeleteProject(m.projects[m.cursor].path, false)
-				delete(m.selected, m.cursor)
-
-				//todo: also delete project from slice choices and projects!
-				i := m.cursor
-				copy(m.choices[i:], m.choices[i+1:])     // Shift a[i+1:] left one index.
-				m.choices[len(m.choices)-1] = ""         // Erase last element (write zero value).
-				m.choices = m.choices[:len(m.choices)-1] // Truncate slice.
-
-				copy(m.projects[i:], m.projects[i+1:])      // Shift a[i+1:] left one index.
-				m.projects[len(m.projects)-1] = project{}   // Erase last element (write zero value).
-				m.projects = m.projects[:len(m.projects)-1] // Truncate slice.
-
-			} else {
-				m.selected[m.cursor] = struct{}{}
+			if m.get_it == DownloadStarted {
+				m.get_it = DownloadFinished
+				log.Printf("Downloaded to %s", m.textInput.Value())
 			}
 		}
 	}
-
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
+	m.textInput, cmd = m.textInput.Update(msg)
+	return m, cmd
 }
 
 func colorizeBuildResult(p project) string {
@@ -183,10 +263,14 @@ func colorizeBuildResult(p project) string {
 }
 
 func (m model) View() string {
-	var result = ""
-	// The header
-	s := "Press enter to delete project\n\n"
-
+	s := ""
+	if m.get_it == DownloadStarted {
+		return fmt.Sprintf(
+			"Enter download path:\n\n%s\n\n%s",
+			m.textInput.View(),
+			"(esc to quit)",
+		) + "\n"
+	}
 	// Iterate over our choices
 	for i, choice := range m.choices {
 
@@ -201,19 +285,26 @@ func (m model) View() string {
 		if _, ok := m.selected[i]; ok {
 			checked = "x" // selected!
 		}
-		result = colorizeBuildResult(m.projects[i])
+		var result = colorizeBuildResult(m.projects[i])
 		// Render the row
 		s += fmt.Sprintf("%s %s [%s] %s\n", cursor, result, checked, choice)
+		s += fmt.Sprintf("Press q to quit, t to delete and r to reset project\n")
+		s += fmt.Sprintf("Press g to download files from initvm\n")
+
 	}
-
-	// The footer
-	s += "\nPress q to quit.\n"
-
-	// Send the UI for rendering
 	return s
+
 }
 
 func main() {
+	/*
+		viper.AddConfigPath("/hdd/go/elbe-prj")
+		viper.SetConfigFile("config.env")
+		viper.ReadInConfig()
+
+		elbe_bin = viper.Get("ELBE").(string)
+		elbe_dl_dir = viper.Get("DEFAULT_DOWNLOAD_DIR").(string)
+	*/
 	f, err := os.OpenFile("elbe.go.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -223,7 +314,7 @@ func main() {
 	log.SetOutput(f)
 	log.Println("Starting new session")
 
-	app := "/home/kai/elbe/elbe"
+	app := "/hdd/elbe/elbe"
 
 	arg0 := "control"
 	arg1 := "list_projects"
@@ -248,9 +339,11 @@ func main() {
 	}
 
 	p := tea.NewProgram(initialModel(projects))
-
 	if _, err := p.Run(); err != nil {
-		fmt.Printf("Alas, there's been an error: %v", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
+
+type (
+	errMsg error
+)
