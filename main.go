@@ -1,31 +1,23 @@
+/*
+Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
 import (
-	"bufio"
+	"elbe-prj/cmd"
+	"elbe-prj/containers"
+	"elbe-prj/utils"
 	"fmt"
-	"log"
+	"log" // TODO: use zap instead
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-)
-
-type BuildResult int
-type DownloadState int
-
-const (
-	Build_Failed BuildResult = iota // 0
-	Build_Done
-	Empty_Project
-	Busy
-	Needs_Build                          // 4
-	DownloadStarted DownloadState = iota // 5
-	DownloadPathEntered
-	DownloadFinished
+	"github.com/muesli/termenv"
+	"github.com/spf13/viper"
 )
 
 type KeyMap struct {
@@ -34,21 +26,22 @@ type KeyMap struct {
 	Reset    key.Binding
 	Delete   key.Binding
 	GetFiles key.Binding
+	Submit   key.Binding
+	Package  key.Binding
 }
 
 var (
-	BuildResultMap = map[string]BuildResult{
-		"build_failed":  Build_Failed,
-		"build_done":    Build_Done,
-		"empty_project": Empty_Project,
-		"busy":          Busy,
-		"needs_build":   Needs_Build,
-	}
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
 	failedStyle       = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("9"))
 	doneStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#04B575"))
 	unusedStyle       = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#3C3C3C"))
 	busyStyle         = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#0000FF"))
+	errorStyle        = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("##ff5100"))
+	keyword           = utils.MakeFgStyle("211")
+	subtle            = utils.MakeFgStyle("241")
+	dot               = utils.ColorFg(" • ", "236")
+	term              = termenv.EnvColorProfile()
+	pbuild_prj        = "/var/cache/elbe/a79a01ed-9091-4f8f-9f20-1ed6a7060634+"
 	DefaultKeyMap     = KeyMap{
 		Up: key.NewBinding(
 			key.WithKeys("k", "up"),        // actual keybindings
@@ -59,8 +52,8 @@ var (
 			key.WithHelp("↓/j", "move down"),
 		),
 		Reset: key.NewBinding(
-			key.WithKeys("r", "reset"), // actual keybindings
-			key.WithHelp("r", "reset"), // corresponding help text
+			key.WithKeys("r", "reset"),
+			key.WithHelp("r", "reset"),
 		),
 		Delete: key.NewBinding(
 			key.WithKeys("t", "delete"),
@@ -70,84 +63,18 @@ var (
 			key.WithKeys("g", "get_files"),
 			key.WithHelp("g", "get files"),
 		),
+		Package: key.NewBinding(
+			key.WithKeys("p", "make_package"),
+			key.WithHelp("p", "make deb package"),
+		),
 	}
 	elbe_bin    = ""
 	elbe_dl_dir = ""
 )
 
-type project struct {
-	path     string
-	name     string
-	result   BuildResult
-	progress DownloadState
-	//builddate
-}
-
-func SplitLines(s string) []string {
-	var lines []string
-	sc := bufio.NewScanner(strings.NewReader(s))
-	for sc.Scan() {
-		lines = append(lines, sc.Text())
-	}
-	return lines
-}
-
-func ParseLine(s string) project {
-	words := strings.Fields(s)
-	c, _ := BuildResultMap[strings.ToLower(words[4])]
-	return project{path: words[0], name: words[1], result: c} //,result:matched_result,builddate:ts}
-}
-
 type elbe_hook struct {
 	path   string
 	dl_dir string
-}
-
-func DeleteProject(path string, needs_reset bool) {
-	app := "/hdd/elbe/elbe"
-	arg0 := "control"
-	arg1 := "del_project"
-	arg2 := path
-
-	log.Printf(" %s %s %s %s", app, arg0, arg1, arg2)
-	cmd := exec.Command("/hdd/elbe/elbe", "control", "del_project", path)
-	stdout, err := cmd.Output()
-	log.Println(stdout)
-	if err != nil {
-		log.Println(err.Error())
-		fmt.Println(err.Error())
-		return
-	}
-
-}
-
-func GetFiles(path string, target_dir string) {
-	app := "/hdd/elbe/elbe"
-	arg0 := "control"
-	arg1 := "get_files"
-	arg2 := path
-
-	log.Printf(" %s %s %s %s", app, arg0, arg1, arg2)
-	cmd := exec.Command("/hdd/elbe/elbe", "control", "get_files", "--output", "None", path)
-	stdout, err := cmd.Output()
-	log.Println(stdout)
-	if err != nil {
-		log.Println(err.Error())
-		fmt.Println(err.Error())
-		return
-	}
-
-}
-
-func ResetProject(path string) {
-	cmd := exec.Command("/hdd/elbe/elbe", "control", "reset_project", path)
-	stdout, err := cmd.Output()
-	log.Println(stdout)
-	if err != nil {
-		log.Println(err.Error())
-		fmt.Println(err.Error())
-		return
-	}
 }
 
 type model struct {
@@ -156,19 +83,19 @@ type model struct {
 	choices   []string
 	selected  map[int]struct{}
 	cursor    int
-	get_it    DownloadState
-	projects  []project
+	get_it    containers.DownloadState
+	projects  []containers.Project
 }
 
-func initialModel(p []project) model {
+func initialModel(p []containers.Project) model {
 	ti := textinput.New()
-	ti.Placeholder = "Pikachu"
+	ti.Placeholder = elbe_dl_dir
 	ti.Focus()
 	ti.CharLimit = 156
 	ti.Width = 20
 	var names []string
 	for _, v := range p {
-		names = append(names, v.name)
+		names = append(names, v.Name)
 	}
 	return model{
 		textInput: ti,
@@ -189,56 +116,68 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	// Is it a key press?
 	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
-		switch msg.String() {
-
-		// These keys should exit the program.
-		case "ctrl+c", "q":
-			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
-		case "up", "k":
-			if m.cursor > 0 {
-				m.cursor--
+		// disable keybinds while textinput is active:
+		if m.get_it == containers.DownloadStarted {
+			switch msg.String() {
+			case "enter", " ":
+				if m.get_it == containers.DownloadStarted {
+					utils.GetFiles(m.projects[m.cursor].Path, m.textInput.Value())
+					m.get_it = containers.DownloadFinished
+					log.Printf("Downloaded to %s", m.textInput.Value())
+				}
 			}
+		} else {
+			// Cool, what was the actual key pressed?
+			switch msg.String() {
 
-		// The "down" and "j" keys move the cursor down
-		case "down", "j":
-			if m.cursor < len(m.choices)-1 {
-				m.cursor++
-			}
-		case "reset", "r":
-			log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
-			ResetProject(m.projects[m.cursor].path)
-			// todo: check for error
-			m.projects[m.cursor].result = Needs_Build
+			// These keys should exit the program.
+			case "ctrl+c", "q":
+				return m, tea.Quit
 
-		case "get_files", "g":
-			log.Printf("getting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
-			m.projects[m.cursor].progress = DownloadStarted
-			m.get_it = DownloadStarted
-			// todo: check for error
-			// todo: append a "-> <download-path>"
-		case "delete", "t":
-			log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].path)
-			DeleteProject(m.projects[m.cursor].path, false)
-			delete(m.selected, m.cursor)
+			// The "up" and "k" keys move the cursor up
+			case "up", "k":
+				if m.cursor > 0 {
+					m.cursor--
+				}
 
-			i := m.cursor
-			copy(m.choices[i:], m.choices[i+1:])     // Shift a[i+1:] left one index.
-			m.choices[len(m.choices)-1] = ""         // Erase last element (write zero value).
-			m.choices = m.choices[:len(m.choices)-1] // Truncate slice.
+			// The "down" and "j" keys move the cursor down
+			case "down", "j":
+				if m.cursor < len(m.choices)-1 {
+					m.cursor++
+				}
+			case "reset", "r":
+				log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].Path)
+				utils.ResetProject(m.projects[m.cursor].Path)
+				// TODO: check for error
+				m.projects[m.cursor].Result = containers.Needs_Build
 
-			copy(m.projects[i:], m.projects[i+1:])      // Shift a[i+1:] left one index.
-			m.projects[len(m.projects)-1] = project{}   // Erase last element (write zero value).
-			m.projects = m.projects[:len(m.projects)-1] // Truncate slice.
+			case "get_files", "g":
+				log.Printf("getting %s@%s", m.choices[m.cursor], m.projects[m.cursor].Path)
+				m.projects[m.cursor].Progress = containers.DownloadStarted
+				m.get_it = containers.DownloadStarted
+				// TODO: check for error
+				// TODO: append a "-> <download-path>"
+			case "delete", "t":
+				log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].Path)
+				utils.DeleteProject(m.projects[m.cursor].Path, false)
+				delete(m.selected, m.cursor)
 
-		// Download-Dir entered,switch back to list-view
-		case "enter", " ":
-			if m.get_it == DownloadStarted {
-				m.get_it = DownloadFinished
-				log.Printf("Downloaded to %s", m.textInput.Value())
+				i := m.cursor
+				copy(m.choices[i:], m.choices[i+1:])     // Shift a[i+1:] left one index.
+				m.choices[len(m.choices)-1] = ""         // Erase last element (write zero value).
+				m.choices = m.choices[:len(m.choices)-1] // Truncate slice.
+
+				copy(m.projects[i:], m.projects[i+1:])               // Shift a[i+1:] left one index.
+				m.projects[len(m.projects)-1] = containers.Project{} // Erase last element (write zero value).
+				m.projects = m.projects[:len(m.projects)-1]          // Truncate slice.
+
+			// Download-Dir entered,switch back to list-view
+			case "enter", " ":
+				if m.get_it == containers.DownloadStarted {
+					m.get_it = containers.DownloadFinished
+					utils.GetFiles(m.projects[m.cursor].Path, m.textInput.Value())
+					log.Printf("Downloaded to %s", m.textInput.Value())
+				}
 			}
 		}
 	}
@@ -246,25 +185,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func colorizeBuildResult(p project) string {
-	switch p.result {
-	case Build_Done:
-		return doneStyle.Render("[done]")
-	case Busy:
-		return busyStyle.Render("[busy]")
-	case Build_Failed:
-		return failedStyle.Render("[failed]")
-	case Needs_Build:
-		return unusedStyle.Render("[needs build]")
-	default:
-		return ""
-	}
-
-}
-
 func (m model) View() string {
 	s := ""
-	if m.get_it == DownloadStarted {
+	if m.get_it == containers.DownloadStarted {
 		return fmt.Sprintf(
 			"Enter download path:\n\n%s\n\n%s",
 			m.textInput.View(),
@@ -285,26 +208,19 @@ func (m model) View() string {
 		if _, ok := m.selected[i]; ok {
 			checked = "x" // selected!
 		}
-		var result = colorizeBuildResult(m.projects[i])
+		var result = utils.ColorizeBuildResult(m.projects[i])
 		// Render the row
 		s += fmt.Sprintf("%s %s [%s] %s\n", cursor, result, checked, choice)
-		s += fmt.Sprintf("Press q to quit, t to delete and r to reset project\n")
-		s += fmt.Sprintf("Press g to download files from initvm\n")
 
 	}
+	var tpl = subtle("q,ctrl+c: quit") + dot + subtle("j/k, up/down: select") + "\n" +
+		subtle("r: reset_project") + dot + subtle("t:  delete_project") + dot + subtle("g: get_files") +
+		dot + subtle("p: debianize source")
+	s += fmt.Sprintf(tpl)
 	return s
 
 }
-
 func main() {
-	/*
-		viper.AddConfigPath("/hdd/go/elbe-prj")
-		viper.SetConfigFile("config.env")
-		viper.ReadInConfig()
-
-		elbe_bin = viper.Get("ELBE").(string)
-		elbe_dl_dir = viper.Get("DEFAULT_DOWNLOAD_DIR").(string)
-	*/
 	f, err := os.OpenFile("elbe.go.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -312,9 +228,19 @@ func main() {
 	defer f.Close()
 
 	log.SetOutput(f)
-	log.Println("Starting new session")
+	cmd.Execute()
 
-	app := "/hdd/elbe/elbe"
+	log.Println("Reading in config config.env")
+	viper.AddConfigPath("/home/sta/projects/go/elbe-prj")
+	viper.SetConfigFile("config.env")
+	viper.ReadInConfig()
+
+	elbe_bin = viper.Get("ELBE").(string)
+	elbe_dl_dir = viper.Get("DEFAULT_DOWNLOAD_DIR").(string)
+	log.Println("elbe bin is located at" + elbe_bin + ", default-dl-dir is " + elbe_dl_dir)
+	utils.LoadConfig(elbe_bin)
+
+	app := elbe_bin
 
 	arg0 := "control"
 	arg1 := "list_projects"
@@ -325,16 +251,17 @@ func main() {
 	stdout, err := cmd.Output()
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Printf("Couldn't get initial project list from elbe-cmd %s %s %s, maybe your config.env isnt't handled correctly", app, arg0, arg1)
+		log.Printf("get_projects backtrace:%s", err.Error())
 		return
 	}
 
-	var projects []project
-	s := SplitLines(string(stdout))
+	var projects []containers.Project
+	s := utils.SplitLines(string(stdout))
 
 	for i, v := range s {
 		log.Println(i, v)
-		p := ParseLine(v)
+		p := utils.ParseLine(v)
 		projects = append(projects, p)
 	}
 
@@ -343,7 +270,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-type (
-	errMsg error
-)
