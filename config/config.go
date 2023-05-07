@@ -12,15 +12,15 @@ type Env struct {
 
 func ReadEnv() Env {
 	viper.AddConfigPath("/home/sta/projects/go/elbe-prj")
-	viper.SetConfigFile("config.env")
+	viper.SetConfigType("json")
+	viper.SetConfigFile("config.json")
 	viper.ReadInConfig()
 
 	return Env{
-		ElbeBin:      viper.Get("ELBE").(string),
-		DefaultDlDir: viper.Get("DEFAULT_DOWNLOAD_DIR").(string),
-		WorkDir:      viper.GetString("WORK_DIR"),
-		SubmitFlags:  viper.GetString("work_dir"),
-		HighlightPrj: viper.GetString("HIGHLIGHT_PBUILDS"),
+		ElbeBin:      viper.GetString("elbe"),
+		DefaultDlDir: viper.GetString("default_dl_dir"),
+		WorkDir:      viper.GetString("work_dir"),
+		HighlightPrj: viper.GetString("highlight_pbuilds"),
 	}
 
 }

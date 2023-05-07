@@ -9,11 +9,7 @@ const (
 	Empty_Project
 	Busy
 	Needs_Build
-	PBuild_Failed
-	PBuild_Done
-	PBuildBusy
-	PBuildNeeds_Build                      // 4
-	DownloadStarted   DownloadState = iota // 5
+	DownloadStarted DownloadState = iota // 5
 	DownloadPathEntered
 	DownloadFinished
 )
@@ -23,4 +19,13 @@ type Project struct {
 	Name     string
 	Result   BuildResult
 	Progress DownloadState
+}
+
+type Debianize struct {
+	PrjName     string
+	TemplateDir string
+	DestDir     string
+	Arch        string
+	Config      string
+	Release     string
 }

@@ -72,6 +72,24 @@ var (
 	elbe_dl_dir = ""
 )
 
+const (
+	kernel_release = iota
+	architecture
+	defconfig
+	src_package
+	src_path
+)
+
+const (
+	hotPink  = lipgloss.Color("#FF06B7")
+	darkGray = lipgloss.Color("#767676")
+)
+
+var (
+	inputStyle    = lipgloss.NewStyle().Foreground(hotPink)
+	continueStyle = lipgloss.NewStyle().Foreground(darkGray)
+)
+
 type elbe_hook struct {
 	path   string
 	dl_dir string
@@ -85,6 +103,9 @@ type model struct {
 	cursor    int
 	get_it    containers.DownloadState
 	projects  []containers.Project
+	debianize bool
+	inputs    []textinput.Model
+	focused   int
 }
 
 func initialModel(p []containers.Project) model {
@@ -97,12 +118,46 @@ func initialModel(p []containers.Project) model {
 	for _, v := range p {
 		names = append(names, v.Name)
 	}
+
+	var inputs []textinput.Model = make([]textinput.Model, 5)
+	inputs[src_package] = textinput.New()
+	inputs[src_package].Placeholder = "SrcPackageName"
+	inputs[src_package].Focus()
+	inputs[src_package].CharLimit = 30
+	inputs[src_package].Width = 30
+	inputs[src_package].Prompt = ""
+
+	inputs[src_path] = textinput.New()
+	inputs[src_path].Placeholder = "~/path/to/source"
+	inputs[src_path].CharLimit = 30
+	inputs[src_path].Width = 30
+	inputs[src_path].Prompt = ""
+
+	inputs[kernel_release] = textinput.New()
+	inputs[kernel_release].Placeholder = "6.1.27"
+	inputs[kernel_release].CharLimit = 30
+	inputs[kernel_release].Width = 30
+	inputs[kernel_release].Prompt = ""
+
+	inputs[architecture] = textinput.New()
+	inputs[architecture].Placeholder = "arm"
+	inputs[architecture].CharLimit = 5
+	inputs[architecture].Width = 5
+	inputs[architecture].Prompt = ""
+
+	inputs[defconfig] = textinput.New()
+	inputs[defconfig].Placeholder = "stm32mp157a-dk1_defconfig"
+	inputs[defconfig].CharLimit = 50
+	inputs[defconfig].Width = 50
+	inputs[defconfig].Prompt = ""
 	return model{
 		textInput: ti,
 		err:       nil,
 		choices:   names,
 		selected:  make(map[int]struct{}),
 		projects:  p,
+		inputs:    inputs,
+		focused:   0,
 	}
 }
 
@@ -119,6 +174,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// disable keybinds while textinput is active:
 		if m.get_it == containers.DownloadStarted {
 			switch msg.String() {
+			case "esc":
+				m.get_it = containers.DownloadFinished
 			case "enter", " ":
 				if m.get_it == containers.DownloadStarted {
 					utils.GetFiles(m.projects[m.cursor].Path, m.textInput.Value())
@@ -126,6 +183,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					log.Printf("Downloaded to %s", m.textInput.Value())
 				}
 			}
+		} else if m.debianize == true {
+			switch msg.Type {
+			case tea.KeyEnter, tea.KeySpace, tea.KeyEsc:
+				m.debianize = false
+			case tea.KeyShiftTab, tea.KeyCtrlP:
+				m.prevInput()
+			case tea.KeyTab, tea.KeyCtrlN:
+				m.nextInput()
+			}
+			for i := range m.inputs {
+				m.inputs[i].Blur()
+			}
+			m.inputs[m.focused].Focus()
+			var cmds []tea.Cmd = make([]tea.Cmd, len(m.inputs))
+			for i := range m.inputs {
+				m.inputs[i], cmds[i] = m.inputs[i].Update(msg)
+			}
+			return m, tea.Batch(cmds...)
 		} else {
 			// Cool, what was the actual key pressed?
 			switch msg.String() {
@@ -171,7 +246,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.projects[len(m.projects)-1] = containers.Project{} // Erase last element (write zero value).
 				m.projects = m.projects[:len(m.projects)-1]          // Truncate slice.
 
-			// Download-Dir entered,switch back to list-view
+			case "make_package", "p":
+				m.debianize = true
+				// Download-Dir entered,switch back to list-view
+			case "esc":
+				m.get_it = containers.DownloadFinished
 			case "enter", " ":
 				if m.get_it == containers.DownloadStarted {
 					m.get_it = containers.DownloadFinished
@@ -192,6 +271,33 @@ func (m model) View() string {
 			"Enter download path:\n\n%s\n\n%s",
 			m.textInput.View(),
 			"(esc to quit)",
+		) + "\n"
+	}
+
+	if m.debianize == true {
+		return fmt.Sprintf(
+			` Enter build parameters:
+	 %s %s  %s %s
+	 %s
+	 %s
+	 %s
+	 %s
+	 %s
+	 %s
+
+	 %s
+	`,
+			inputStyle.Width(30).Render("SrcPackage"),
+			m.inputs[src_package].View(),
+			inputStyle.Width(30).Render("SourcePath"),
+			m.inputs[src_path].View(),
+			inputStyle.Width(30).Render("Kernel Release"),
+			m.inputs[kernel_release].View(),
+			inputStyle.Width(13).Render("Architecture"),
+			m.inputs[architecture].View(),
+			inputStyle.Width(6).Render("Config"),
+			m.inputs[defconfig].View(),
+			continueStyle.Render("Press Enter to submit"),
 		) + "\n"
 	}
 	// Iterate over our choices
@@ -220,6 +326,20 @@ func (m model) View() string {
 	return s
 
 }
+
+// nextInput focuses the next input field
+func (m *model) nextInput() {
+	m.focused = (m.focused + 1) % len(m.inputs)
+}
+
+// prevInput focuses the previous input field
+func (m *model) prevInput() {
+	m.focused--
+	// Wrap around
+	if m.focused < 0 {
+		m.focused = len(m.inputs) - 1
+	}
+}
 func main() {
 	f, err := os.OpenFile("elbe.go.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -231,12 +351,13 @@ func main() {
 	cmd.Execute()
 
 	log.Println("Reading in config config.env")
+	viper.SetConfigType("json")
 	viper.AddConfigPath("/home/sta/projects/go/elbe-prj")
-	viper.SetConfigFile("config.env")
+	viper.SetConfigFile("config.json")
 	viper.ReadInConfig()
 
-	elbe_bin = viper.Get("ELBE").(string)
-	elbe_dl_dir = viper.Get("DEFAULT_DOWNLOAD_DIR").(string)
+	elbe_bin = viper.GetString("elbe")
+	elbe_dl_dir = viper.GetString("default_dl_dir")
 	log.Println("elbe bin is located at" + elbe_bin + ", default-dl-dir is " + elbe_dl_dir)
 	utils.LoadConfig(elbe_bin)
 
