@@ -28,10 +28,9 @@ func main() {
 
 	log.Println("Reading in config config.env")
 	viper.SetConfigType("json")
-	viper.AddConfigPath("/home/sta/projects/go/elbe-prj")
-	viper.SetConfigFile("config.json")
-	viper.ReadInConfig()
-
+	viper.AddConfigPath("/etc/elbe-tui/")
+	viper.SetConfigName("config")
+	err = viper.ReadInConfig()
 	var elbe_bin = viper.GetString("elbe")
 	var elbe_dl_dir = viper.GetString("default_dl_dir")
 	log.Println("elbe bin is located at" + elbe_bin + ", default-dl-dir is " + elbe_dl_dir)

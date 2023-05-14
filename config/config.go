@@ -11,9 +11,9 @@ type Env struct {
 }
 
 func ReadEnv() Env {
-	viper.AddConfigPath("/home/sta/projects/go/elbe-prj")
 	viper.SetConfigType("json")
-	viper.SetConfigFile("config.json")
+	viper.AddConfigPath("/etc/elbe-tui/")
+	viper.SetConfigName("config")
 	viper.ReadInConfig()
 
 	return Env{
