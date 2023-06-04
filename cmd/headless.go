@@ -16,7 +16,7 @@ import (
 // headlessCmd represents the headless command
 var headlessCmd = &cobra.Command{
 	Use:   "headless",
-	Short: "Enables command line args",
+	Short: "Enables command line functionality",
 	Long:  `Allows further customized commands, enables pipelined commands and early exit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("headless called")

@@ -5,6 +5,7 @@ import (
 	"elbe-prj/utils"
 	"fmt"
 	"log"
+	"os/exec"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -114,8 +115,8 @@ func InitialModel(p []containers.Project) Model {
 
 	inputs[src_path] = textinput.New()
 	inputs[src_path].Placeholder = "~/path/to/source"
-	inputs[src_path].CharLimit = 30
-	inputs[src_path].Width = 30
+	inputs[src_path].CharLimit = 70
+	inputs[src_path].Width = 70
 	inputs[src_path].Prompt = ""
 
 	inputs[kernel_release] = textinput.New()
@@ -171,6 +172,21 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		} else if m.debianize == true {
 			switch msg.Type {
 			case tea.KeyEnter, tea.KeySpace, tea.KeyEsc:
+				debianize_sh := "/etc/elbe-tui/scripts/debianize.sh"
+				template_dir := "/etc/elbe-tui/templates/"
+
+				linux_version := m.inputs[0].Value()
+				arch := m.inputs[1].Value()
+				config := m.inputs[2].Value()
+				src_package := m.inputs[3].Value()
+				output_dir := m.inputs[4].Value()
+				package_type := "kernel"
+
+				stdout, err := exec.Command(debianize_sh, template_dir, output_dir, package_type, linux_version, arch, config, src_package, package_type).Output()
+				if err != nil {
+					log.Printf("Couldnt debianize source:%v", string(stdout))
+				}
+
 				m.debianize = false
 			case tea.KeyShiftTab, tea.KeyCtrlP:
 				m.prevInput()
@@ -185,6 +201,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			for i := range m.inputs {
 				m.inputs[i], cmds[i] = m.inputs[i].Update(msg)
 			}
+
 			return m, tea.Batch(cmds...)
 		} else {
 			// Cool, what was the actual key pressed?
@@ -233,6 +250,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			case "make_package", "p":
 				m.debianize = true
+
 				// Download-Dir entered,switch back to list-view
 			case "esc":
 				m.get_it = containers.DownloadFinished

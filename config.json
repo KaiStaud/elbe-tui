@@ -1,8 +1,9 @@
 {
-"elbe":"/hdd/elbe/elbe",
+"skip_elbe_cmds":"true",    
+"elbe":"/home/sta/elbe/elbe",
 "default_dl_dir":"/home/sta/projects",
 "work_dir":"/home/sta/projects/elbe-builds/",
-"template_dir":"/hdd/elbe-tui/templates",
+"template_dir":"/etc/elbe-tui/templates",
 "submit_flags":"--skip-build-bin --skip-build-sources",
 "highlight_pbuilds":"/var/cache/elbe/a79a01ed-9091-4f8f-9f20-1ed6a7060634"
 }

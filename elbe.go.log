@@ -379,3 +379,229 @@
 2023/05/07 15:25:18 3 /var/cache/elbe/97908890-d2e5-4359-947d-28169a427379	Tutorial stm32mp157a-dk1	3.0	build_failed	2023-05-05 17:25:17.824864
 2023/05/07 15:25:18 4 /var/cache/elbe/bcfdc699-6956-4e48-8a1c-2c5a304dae1a	Tutorial stm32mp157a-dk1	3.0	build_failed	2023-05-06 09:25:50.508801
 2023/05/07 15:25:18 5 /var/cache/elbe/a115ad11-e291-468a-939f-70fee8650c8a	Tutorial stm32mp157a-dk1	3.0	build_failed	2023-05-06 10:48:10.254282
+2023/05/31 13:54:23 Reading in config config.env
+2023/05/31 13:54:23 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 13:54:23 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 13:54:23 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:04:07 Reading in config config.env
+2023/05/31 14:04:07 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:04:07 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:04:07 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:04:24 Reading in config config.env
+2023/05/31 14:04:24 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:04:24 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:04:24 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:05:03 Reading in config config.env
+2023/05/31 14:05:03 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:05:03 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:05:03 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:05:27 Reading in config config.env
+2023/05/31 14:05:27 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:05:27 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:05:27 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:06:13 Reading in config config.env
+2023/05/31 14:06:13 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:06:13 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:06:13 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:07:05 Reading in config config.env
+2023/05/31 14:07:05 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:07:05 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:07:05 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:08:27 Reading in config config.env
+2023/05/31 14:08:27 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:08:27 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:08:27 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:11:10 Reading in config config.env
+2023/05/31 14:11:10 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:11:10 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:11:10 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:11:57 Reading in config config.env
+2023/05/31 14:11:57 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:11:57 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:11:57 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:12:09 Reading in config config.env
+2023/05/31 14:12:09 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:12:09 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:12:09 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:19:47 Reading in config config.env
+2023/05/31 14:19:47 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:19:47 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:19:47 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:21:50 Reading in config config.env
+2023/05/31 14:21:50 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:21:50 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:21:50 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:22:05 Reading in config config.env
+2023/05/31 14:22:05 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:22:05 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:22:05 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/05/31 14:29:02 Reading in config config.env
+2023/05/31 14:29:02 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/05/31 14:29:02 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/05/31 14:29:02 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:19:20 Reading in config config.env
+2023/06/01 08:19:20 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:19:20 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:19:20 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:19:27 Reading in config config.env
+2023/06/01 08:19:27 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:19:27 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:19:27 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:20:58 Couldnt debianize source:
+2023/06/01 08:20:58 Reading in config config.env
+2023/06/01 08:20:58 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:20:58 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:20:58 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:21:44 Couldnt debianize source:
+2023/06/01 08:21:44 Reading in config config.env
+2023/06/01 08:21:44 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:21:44 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:21:44 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:25:28 Couldnt debianize source:
+2023/06/01 08:25:28 Reading in config config.env
+2023/06/01 08:25:28 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:25:28 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:25:28 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 08:28:32 Couldnt debianize source:
+2023/06/01 08:28:32 Reading in config config.env
+2023/06/01 08:28:32 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 08:28:32 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/06/01 08:28:32 get_projects backtrace:fork/exec /hdd/elbe/elbe: no such file or directory
+2023/06/01 11:35:14 Reading in config config.env
+2023/06/01 11:35:14 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:35:14 0 No projects configured in initvm
+2023/06/01 11:49:09 Reading in config config.env
+2023/06/01 11:49:09 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:49:09 0 No projects configured in initvm
+2023/06/01 11:52:50 Reading in config config.env
+2023/06/01 11:52:50 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:52:50 0 No projects configured in initvm
+2023/06/01 11:53:19 Reading in config config.env
+2023/06/01 11:53:19 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:53:19 0 No projects configured in initvm
+2023/06/01 11:53:23 getting projects@No
+2023/06/01 11:55:39 Reading in config config.env
+2023/06/01 11:55:39 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:55:39 0 No projects configured in initvm
+2023/06/01 11:59:59 Reading in config config.env
+2023/06/01 11:59:59 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 11:59:59 0 No projects configured in initvm
+2023/06/01 12:09:13 Reading in config config.env
+2023/06/01 12:09:13 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 12:09:13 0 No projects configured in initvm
+2023/06/01 12:15:19 Reading in config config.env
+2023/06/01 12:15:19 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 12:15:20 0 No projects configured in initvm
+2023/06/01 12:19:41 Reading in config config.env
+2023/06/01 12:19:41 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 12:19:41 0 No projects configured in initvm
+2023/06/01 13:07:40 Reading in config config.env
+2023/06/01 13:07:40 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:07:40 0 No projects configured in initvm
+2023/06/01 13:08:52 Couldnt debianize source:
+2023/06/01 13:09:30 Reading in config config.env
+2023/06/01 13:09:30 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:09:30 0 No projects configured in initvm
+2023/06/01 13:10:03 Couldnt debianize source:arm64
+kernel
+1234
+total 9820
+drwxrwxr-x 13 sta sta             4096 Jun  1 13:07 .
+drwxrwxr-x  3 sta libvirt-qemu    4096 Jun  1 10:52 ..
+drwxrwxr-x  2 sta sta             4096 Mai 31 13:51 cmd
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 config
+-rw-rw-r--  1 sta sta              222 Mai 31 11:51 _config.env
+-rw-rw-r--  1 sta sta              320 Jun  1 11:39 config.json
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 containers
+drwxrwxr-x  2 sta sta             4096 Jun  1 13:07 debianize_test
+-rw-rw-r--  1 sta sta            54672 Jun  1 13:09 elbe.go.log
+-rwxrwxr-x  1 sta sta          9859466 Jun  1 13:07 elbe-prj
+drwxrwxr-x  2 sta sta             4096 Jun  1 12:19 erlang
+drwxrwxr-x  8 sta sta             4096 Jun  1 13:07 .git
+-rw-rw-r--  1 sta sta             1753 Mai 31 11:51 go.mod
+-rw-rw-r--  1 sta sta            53037 Mai 31 11:51 go.sum
+-rw-rw-r--  1 sta sta             1586 Jun  1 11:47 main.go
+drwxr-xr-x  2 sta sta             4096 Jun  1 09:48 output-dir
+-rwxrwxr-x  1 sta sta               55 Mai 31 14:11 post.sh
+-rwxrwxr-x  1 sta sta               51 Mai 31 14:22 pre.sh
+drwxrwxr-x  2 sta sta             4096 Mai 31 15:00 scripts
+drwxrwxr-x  3 sta sta             4096 Mai 31 11:51 templates
+-rw-rw-r--  1 sta sta               25 Mai 31 14:29 test.b
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 utils
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 .vscode
+2023/06/01 13:14:53 Reading in config config.env
+2023/06/01 13:14:53 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:14:53 0 No projects configured in initvm
+2023/06/01 13:15:47 Couldnt debianize source:arm64
+kernel
+1234
+total 9820
+drwxrwxr-x 13 sta sta             4096 Jun  1 13:15 .
+drwxrwxr-x  3 sta libvirt-qemu    4096 Jun  1 10:52 ..
+drwxrwxr-x  2 sta sta             4096 Mai 31 13:51 cmd
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 config
+-rw-rw-r--  1 sta sta              222 Mai 31 11:51 _config.env
+-rw-rw-r--  1 sta sta              320 Jun  1 11:39 config.json
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 containers
+-rw-rw-r--  1 sta sta            56332 Jun  1 13:14 elbe.go.log
+-rwxrwxr-x  1 sta sta          9859466 Jun  1 13:07 elbe-prj
+drwxrwxr-x  2 sta sta             4096 Jun  1 12:19 erlang
+drwxrwxr-x  8 sta sta             4096 Jun  1 13:07 .git
+-rw-rw-r--  1 sta sta             1753 Mai 31 11:51 go.mod
+-rw-rw-r--  1 sta sta            53037 Mai 31 11:51 go.sum
+-rw-rw-r--  1 sta sta             1586 Jun  1 11:47 main.go
+drwxr-xr-x  2 sta sta             4096 Jun  1 09:48 output-dir
+-rwxrwxr-x  1 sta sta               55 Mai 31 14:11 post.sh
+-rwxrwxr-x  1 sta sta               51 Mai 31 14:22 pre.sh
+drwxrwxr-x  2 sta sta             4096 Mai 31 15:00 scripts
+drwxrwxr-x  3 sta sta             4096 Mai 31 11:51 templates
+-rw-rw-r--  1 sta sta               25 Mai 31 14:29 test.b
+drwxrwxr-x  2 sta sta             4096 Jun  1 13:14 testp
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 utils
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 .vscode
+2023/06/01 13:28:59 Reading in config config.env
+2023/06/01 13:28:59 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:29:00 0 No projects configured in initvm
+2023/06/01 13:29:21 Couldnt debianize source:admda
+kernel
+1233
+total 9824
+drwxrwxr-x 14 sta sta             4096 Jun  1 13:29 .
+drwxrwxr-x  3 sta libvirt-qemu    4096 Jun  1 10:52 ..
+drwxrwxr-x  2 sta sta             4096 Mai 31 13:51 cmd
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 config
+-rw-rw-r--  1 sta sta              222 Mai 31 11:51 _config.env
+-rw-rw-r--  1 sta sta              320 Jun  1 11:39 config.json
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 containers
+-rw-rw-r--  1 sta sta            57983 Jun  1 13:29 elbe.go.log
+-rwxrwxr-x  1 sta sta          9859034 Jun  1 13:28 elbe-prj
+drwxrwxr-x  2 sta sta             4096 Jun  1 12:19 erlang
+drwxrwxr-x  8 sta sta             4096 Jun  1 13:28 .git
+-rw-rw-r--  1 sta sta             1753 Mai 31 11:51 go.mod
+-rw-rw-r--  1 sta sta            53037 Mai 31 11:51 go.sum
+-rw-rw-r--  1 sta sta             1586 Jun  1 11:47 main.go
+drwxr-xr-x  2 sta sta             4096 Jun  1 09:48 output-dir
+-rwxrwxr-x  1 sta sta               55 Mai 31 14:11 post.sh
+-rwxrwxr-x  1 sta sta               51 Mai 31 14:22 pre.sh
+drwxrwxr-x  2 sta sta             4096 Mai 31 15:00 scripts
+drwxrwxr-x  3 sta sta             4096 Mai 31 11:51 templates
+drwxr-xr-x  4 sta sta             4096 Jun  1 13:29 tesp
+-rw-rw-r--  1 sta sta               25 Mai 31 14:29 test.b
+drwxrwxr-x  2 sta sta             4096 Jun  1 13:14 testp
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 utils
+drwxrwxr-x  2 sta sta             4096 Mai 31 11:51 .vscode
+2023/06/01 13:31:04 Reading in config config.env
+2023/06/01 13:31:04 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:31:04 0 No projects configured in initvm
+2023/06/01 13:48:06 Reading in config config.env
+2023/06/01 13:48:06 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 13:48:07 0 No projects configured in initvm
+2023/06/01 14:10:50 Reading in config config.env
+2023/06/01 14:10:50 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 14:10:50 0 No projects configured in initvm
+2023/06/01 14:13:19 Reading in config config.env
+2023/06/01 14:13:19 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 14:13:19 0 No projects configured in initvm
+2023/06/01 14:40:12 Reading in config config.env
+2023/06/01 14:40:12 elbe bin is located at/home/sta/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/06/01 14:40:12 0 No projects configured in initvm
