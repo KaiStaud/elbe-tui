@@ -1,9 +1,50 @@
 {
-"skip_elbe_cmds":"true",    
-"elbe":"/home/sta/elbe/elbe",
-"default_dl_dir":"/home/sta/projects",
-"work_dir":"/home/sta/projects/elbe-builds/",
-"template_dir":"/etc/elbe-tui/templates",
-"submit_flags":"--skip-build-bin --skip-build-sources",
-"highlight_pbuilds":"/var/cache/elbe/a79a01ed-9091-4f8f-9f20-1ed6a7060634"
+    "skip_elbe_cmds": "true",
+    "elbe": "/home/sta/elbe/elbe",
+    "default_dl_dir": "/home/sta/projects",
+    "work_dir": "/home/sta/projects/elbe-builds/",
+    "template_dir": "/etc/elbe-tui/templates",
+    "submit_flags": "--skip-build-bin --skip-build-sources",
+    "highlight_pbuilds": "/var/cache/elbe/a79a01ed-9091-4f8f-9f20-1ed6a7060634",
+    "default_environment": {
+        "raspberrypi4": [
+            {
+                "name": "raspberrypi4",
+                "xml": "rpi.xml",
+                "virtualized": false,
+                "volume": "images/rpi",
+                "auto_build": true,
+                "pbuild_source": {
+                    "build_packages": [
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-kernel"
+                        },
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-firmware"
+                        },
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-overlays"
+                        }
+                    ],
+                    "upload_packages": [
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-kernel.deb"
+                        },
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-firmware.deb"
+                        },
+                        {
+                            "git": false,
+                            "path": "~/projects/pbuilding/rpi-overlays.deb"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
 }
