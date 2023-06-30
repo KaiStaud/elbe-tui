@@ -1,0 +1,17 @@
+Source: elbe-tui
+Maintainer: Debian Go Packaging Team <team+pkg-go@tracker.debian.org>
+Uploaders: sta <TODO>
+Section: devel
+Testsuite: autopkgtest-pkg-go
+Priority: optional
+Build-Depends: debhelper-compat (= 12),
+               dh-golang,
+               golang-any,
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+
+Package: elbe-tui-dev
+Architecture: all
+Depends: ${misc:Depends}
+Description: Go package elbe-tui (library)
+

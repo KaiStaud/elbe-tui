@@ -4,8 +4,11 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"elbe-prj/containers"
+	"elbe-prj/erlang"
+	"log"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
 
@@ -13,26 +16,31 @@ import (
 var debianizeCmd = &cobra.Command{
 	Use:   "debianize",
 	Short: "debianize source folder",
-	Long:  `Creates a customized source folder for given source directory`,
+	Long:  `Creates a customized debian folder for given source directory`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("debianize called")
+		/*
+			fmt.Println("debianize called")
+			debianize_sh := "/etc/elbe-tui/scripts/debianize.sh"
+			template_dir := "/etc/elbe-tui/templates"
+			output_dir := cmd.Flags().Lookup("output-dir").Value.String()
+			package_type := cmd.Flags().Lookup("package-type").Value.String()
+			stdout, err := exec.Command(debianize_sh, template_dir, output_dir, package_type).Output()
+			if err != nil {
+				log.Printf("Couldnt debianize source:%v", string(stdout))
+			}
+		*/
+		var projects []containers.Project
+
+		var m = erlang.InitialModel(projects)
+		p := tea.NewProgram(m) //erlang.InitialModel(projects))
+		if _, err := p.Run(); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(debianizeCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	debianizeCmd.PersistentFlags().String("bootloader", "", "debianizes u-boot and tf-a bootloader-source")
-	debianizeCmd.PersistentFlags().String("kernel", "", "debianizes linux kernel source")
-	debianizeCmd.PersistentFlags().String("module", "", "creates a debianized kernel module")
-	debianizeCmd.PersistentFlags().String("dkms", "", "creates a debianized dkms-kernel module")
-	debianizeCmd.PersistentFlags().String("application", "", "debianizes application code")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// debianizeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	debianizeCmd.PersistentFlags().String("package-type", "", "bootloader, kernel, [dkms-]module, application")
+	debianizeCmd.PersistentFlags().String("output-dir", "", "")
 }
