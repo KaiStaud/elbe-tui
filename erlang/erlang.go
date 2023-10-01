@@ -8,6 +8,7 @@ import (
 	"os/exec"
 
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -21,10 +22,12 @@ type Model struct {
 	selected  map[int]struct{}
 	cursor    int
 	get_it    containers.DownloadState
+	setup     containers.PBuilderState
 	projects  []containers.Project
 	debianize bool
 	inputs    []textinput.Model
 	focused   int
+	spinner   spinner.Model
 }
 
 type KeyMap struct {
@@ -35,6 +38,10 @@ type KeyMap struct {
 	GetFiles key.Binding
 	Submit   key.Binding
 	Package  key.Binding
+	Start    key.Binding
+	Stop     key.Binding
+	PBuild   key.Binding
+	ReBuild  key.Binding
 }
 
 var (
@@ -74,6 +81,22 @@ var (
 			key.WithKeys("p", "make_package"),
 			key.WithHelp("p", "make deb package"),
 		),
+		Start: key.NewBinding(
+			key.WithKeys("i", "initvm_start"),
+			key.WithHelp("i", "initvm start"),
+		),
+		Stop: key.NewBinding(
+			key.WithKeys("o", "initvm_stop"),
+			key.WithHelp("o", "initvm stop"),
+		),
+		PBuild: key.NewBinding(
+			key.WithKeys("c", "pbuilder_build "),
+			key.WithHelp("c", "pbuilder build "),
+		),
+		ReBuild: key.NewBinding(
+			key.WithKeys("x", "control_build "),
+			key.WithHelp("x", "control build "),
+		),
 	}
 	elbe_bin    = ""
 	elbe_dl_dir = ""
@@ -92,7 +115,23 @@ const (
 var (
 	inputStyle    = lipgloss.NewStyle().Foreground(hotPink)
 	continueStyle = lipgloss.NewStyle().Foreground(darkGray)
+	waiting       = containers.PbuilderDone
+	debug_info    string
 )
+
+func InitWorker(wait_busy chan containers.PBuilderState, info chan string) {
+	waiting = containers.CreatePrj
+	for true {
+		select {
+		case str_info := <-info:
+			debug_info = str_info
+
+		case signal := <-wait_busy:
+			waiting = signal
+		default:
+		}
+	}
+}
 
 func InitialModel(p []containers.Project) Model {
 	ti := textinput.New()
@@ -136,6 +175,10 @@ func InitialModel(p []containers.Project) Model {
 	inputs[defconfig].CharLimit = 50
 	inputs[defconfig].Width = 50
 	inputs[defconfig].Prompt = ""
+
+	s := spinner.New()
+	s.Spinner = spinner.Dot
+
 	return Model{
 		textInput: ti,
 		err:       nil,
@@ -144,16 +187,20 @@ func InitialModel(p []containers.Project) Model {
 		projects:  p,
 		inputs:    inputs,
 		focused:   0,
+		spinner:   s,
+		setup:     containers.PbuilderDone,
 	}
 }
 
 func (m Model) Init() tea.Cmd {
-	return textinput.Blink
+	//	return textinput.Blink
+	return m.spinner.Tick
+
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-
+	m.setup = waiting // Get the busy flag from pbuilder!
 	switch msg := msg.(type) {
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -222,6 +269,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if m.cursor < len(m.choices)-1 {
 					m.cursor++
 				}
+
+			case "i", "initvm_start":
+				utils.StartInitvm()
+			case "o", "initvm_stop":
+				utils.StopInitvm()
+			//case "c", "pbuilder_build ":
+			//case "x", "control_build "
+
 			case "reset", "r":
 				log.Printf("deleting %s@%s", m.choices[m.cursor], m.projects[m.cursor].Path)
 				utils.ResetProject(m.projects[m.cursor].Path)
@@ -262,6 +317,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			}
 		}
+	default:
+		var cmd tea.Cmd
+		m.spinner, cmd = m.spinner.Update(msg)
+		return m, cmd
 	}
 	m.textInput, cmd = m.textInput.Update(msg)
 	return m, cmd
@@ -269,6 +328,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	s := ""
+
+	if m.setup == containers.CreatePrj {
+		return fmt.Sprintf("\n\n   %s %s, pls wait...\n\n", m.spinner.View(), debug_info)
+	} else if m.setup == containers.UploadPkg {
+		return fmt.Sprintf("\n\n   %s Uploading package  %s into project, pls wait...\n\n", m.spinner.View(), debug_info)
+	}
+
 	if m.get_it == containers.DownloadStarted {
 		return fmt.Sprintf(
 			"Enter download path:\n\n%s\n\n%s",
@@ -323,6 +389,7 @@ func (m Model) View() string {
 
 	}
 	var tpl = subtle("q,ctrl+c: quit") + dot + subtle("j/k, up/down: select") + "\n" +
+		subtle("i/o: start/stop initvm") + dot + subtle("c:  pbuild package") + dot + subtle("x: rebuild image") + "\n" +
 		subtle("r: reset_project") + dot + subtle("t:  delete_project") + dot + subtle("g: get_files") +
 		dot + subtle("p: debianize source")
 	s += fmt.Sprintf(tpl)

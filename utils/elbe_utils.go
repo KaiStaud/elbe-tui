@@ -4,6 +4,7 @@ import (
 	"elbe-prj/config"
 	"elbe-prj/containers"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os/exec"
 )
@@ -92,6 +93,96 @@ func ResetProject(path string) {
 		fmt.Println(err.Error())
 		return // colorizeErrorMessage(stdout)
 	}
+}
+
+func StartInitvm() {
+	cmd := exec.Command(elbe_bin, "initvm", "start")
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Println(stdout)
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return // colorizeErrorMessage(stdout)
+	}
+}
+
+func StopInitvm() {
+	cmd := exec.Command(elbe_bin, "initvm", "stop")
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Println(stdout)
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return // colorizeErrorMessage(stdout)
+	}
+}
+
+func CreatePackage(project string) {
+	cmd := exec.Command(elbe_bin, "pbuilder", "build", project, "--out=../out")
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Println(stdout)
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return // colorizeErrorMessage(stdout)
+	}
+}
+
+func UploadPackage(prj string, path string, ch chan<- bool) {
+	var c = config.ReadEnv()
+	elbe_bin = c.ElbeBin
+
+	go func() {
+		// cmd := exec.Command(elbe_bin, "pbuilder", "create", "--xmlfile="+path, "--writeproject=/tmp/test.prj")
+		cmd := exec.Command("sleep", "3")
+		stdout, err := cmd.Output()
+		ch <- true
+		if err != nil {
+			log.Println(stdout)
+			log.Println(err.Error())
+			fmt.Println(err.Error())
+
+		}
+	}()
+
+}
+
+func BuildImage(project string, xml string) {
+	cmd := exec.Command(elbe_bin, "control", "build", project)
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Println(stdout)
+		log.Println(err.Error())
+		fmt.Println(err.Error())
+		return // colorizeErrorMessage(stdout)
+	}
+}
+
+func CreateProject(path string, prj string, ch chan<- bool) string {
+	var c = config.ReadEnv()
+	elbe_bin = c.ElbeBin
+
+	go func() {
+		// cmd := exec.Command(elbe_bin, "pbuilder", "create", "--xmlfile="+path, "--writeproject=/tmp/test.prj")
+		cmd := exec.Command("sleep", "5")
+		stdout, err := cmd.Output()
+		ch <- true
+		if err != nil {
+			log.Println(stdout)
+			log.Println(err.Error())
+			fmt.Println(err.Error())
+
+		}
+	}()
+	buf, e := ioutil.ReadFile("/tmp/test.prj")
+	if e == nil {
+		print("couldnt read in tmp-file %e", e)
+	}
+	return string(buf)
+}
+
+func ReadProjectString(path string) string {
+	return "not implemented"
 }
 
 // Get all projects wich Buildresult matches the filter

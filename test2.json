@@ -1,0 +1,54 @@
+
+{
+    "default_environments": [
+      {
+        "name": "stm32",
+        "xml": "/home/sta/Desktop/xml/stm32mp_systemd_2.xml",
+        "prj":"",
+        "prjfile:":"",
+        "volume": 23,
+        "pbuild_sources": {
+            "pbuild_src_tree":
+            [
+                { 
+                 "package_name": "ecal-samples_1.0.0-1_armhf.deb",
+                 "path": "/home/sta/projects/pbuilding/ecal-out",
+                 "upload_from":"/home/sta/projects/pbuilding/ecal-out"
+                },
+                { 
+                   "package_name": "ecal-tools_1.0.0-1_armhf.debii",
+                   "path": "/home/sta/projects/pbuilding/ecal-out",
+                   "upload_from":"some_path"
+                },
+                { 
+                    "package_name": "ecal-lib_1.0.0-1_armhf.debii",
+                    "path": "/home/sta/projects/pbuilding/ecal-out",
+                    "upload_from":"some_path"
+                 }
+
+            ]
+        }
+      },
+      {
+        "name": "bbb",
+        "xml": "/home/sta/Desktop/xml/bbb.xml",
+        "prj":"",
+        "prjfile:":"",
+        "pbuild_sources": {
+            "pbuild_src_tree":
+            [
+                { 
+                 "package_name": "https://src.com",
+                "path": "https://twitter.com",
+                "upload_from":"some_path"
+                },
+                { 
+                    "package_name": "https://com",
+                   "path": "https://om",
+                   "upload_from":"some_path"
+                }
+            ]
+        }
+       } 
+    ]
+}

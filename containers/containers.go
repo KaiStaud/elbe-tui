@@ -2,6 +2,7 @@ package containers
 
 type BuildResult int
 type DownloadState int
+type PBuilderState int
 
 const (
 	Build_Failed BuildResult = iota // 0
@@ -12,6 +13,9 @@ const (
 	DownloadStarted DownloadState = iota // 5
 	DownloadPathEntered
 	DownloadFinished
+	CreatePrj PBuilderState = iota
+	UploadPkg
+	PbuilderDone
 )
 
 type Project struct {

@@ -17,6 +17,7 @@ import (
 )
 
 func main() {
+
 	f, err := os.OpenFile("elbe.go.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -61,6 +62,7 @@ func main() {
 		projects = append(projects, p)
 	}
 	var m = erlang.InitialModel(projects)
+
 	p := tea.NewProgram(m) //erlang.InitialModel(projects))
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)
