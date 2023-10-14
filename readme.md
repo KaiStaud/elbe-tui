@@ -2,12 +2,13 @@
 elbe-tui (or as preferred shortenened etui) abstracts away elbe's cumbersome cli interface and (at least) aims to provide
 instead a sructured,keyed and user-friendly "do-it-all in one" application to build debian based rfs images.
 When started, etui list all projects in a color coded way:
-![alt text](https://github.com/KaiStaud/elbe-tui/doc/01-etui_startscreen.png)
+
+![startscreen](https://github.com/KaiStaud/elbe-tui/blob/main/doc/01-etui_startscreen.png)
 
 As you might already noticed, it also provides keyboard bindings to access the most common tasks. 
 For example r resets a failed project, t deletes it and g downloads files:
 
-![alt text](https://github.com/KaiStaud/elbe-tui/doc/03_reset_prj.webm)
+![keybindings](https://github.com/KaiStaud/elbe-tui/blob/main/doc/03_reset_prj.webm)
 
 When started etui lists all stored initvm projects, and provides direct access to them via its keybindings.
 The user is recommended to provide a personized config.json file to configure etui, which will provide the working directory whith its structure.
