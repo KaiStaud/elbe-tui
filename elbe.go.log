@@ -14,3 +14,57 @@
 2023/10/01 14:40:58 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
 2023/10/01 14:41:08 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
 2023/10/01 14:41:08 get_projects backtrace:exit status 10
+2023/10/01 14:49:30 Reading in config config.env
+2023/10/01 14:49:30 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/01 14:49:40 Couldn't get initial project list from elbe-cmd /hdd/elbe/elbe control list_projects, maybe your config.env isnt't handled correctly
+2023/10/01 14:49:40 get_projects backtrace:exit status 10
+2023/10/01 14:49:59 Reading in config config.env
+2023/10/01 14:49:59 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/01 14:50:47 Reading in config config.env
+2023/10/01 14:50:47 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/01 14:50:47 0 /var/cache/elbe/375a58ee-a3f2-4a0f-a0b7-2183a21adcd5	beaglebone-black	1.0	build_done	2023-08-02 07:04:49.758527
+2023/10/01 14:50:47 1 /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146	beaglebone-black	1.0	build_failed	2023-07-31 20:14:48.305520
+2023/10/01 14:50:47 2 /var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7	Bullseye Tutorial stm32mp157a-dk1	3.0	has_changes	2023-08-27 13:01:21.250801
+2023/10/01 14:50:47 3 /var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d	Bullseye Tutorial stm32mp157a-dk1	3.0	build_failed	2023-08-27 13:09:28.300824
+2023/10/01 14:50:47 4 /var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b	beaglebone-black	1.0	build_failed	2023-09-03 13:32:59.521000
+2023/10/01 14:51:36 Reading in config config.env
+2023/10/01 14:51:36 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/01 14:51:36 0 /var/cache/elbe/375a58ee-a3f2-4a0f-a0b7-2183a21adcd5	beaglebone-black	1.0	build_done	2023-08-02 07:04:49.758527
+2023/10/01 14:51:36 1 /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146	beaglebone-black	1.0	build_failed	2023-07-31 20:14:48.305520
+2023/10/01 14:51:36 2 /var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7	Bullseye Tutorial stm32mp157a-dk1	3.0	has_changes	2023-08-27 13:01:21.250801
+2023/10/01 14:51:36 3 /var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d	Bullseye Tutorial stm32mp157a-dk1	3.0	build_failed	2023-08-27 13:09:28.300824
+2023/10/01 14:51:36 4 /var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b	beaglebone-black	1.0	build_failed	2023-09-03 13:32:59.521000
+2023/10/01 14:51:49 Reading in config config.env
+2023/10/01 14:51:49 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/01 14:51:50 0 /var/cache/elbe/375a58ee-a3f2-4a0f-a0b7-2183a21adcd5	beaglebone-black	1.0	build_done	2023-08-02 07:04:49.758527
+2023/10/01 14:51:50 1 /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146	beaglebone-black	1.0	build_failed	2023-07-31 20:14:48.305520
+2023/10/01 14:51:50 2 /var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7	Bullseye Tutorial stm32mp157a-dk1	3.0	has_changes	2023-08-27 13:01:21.250801
+2023/10/01 14:51:50 3 /var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d	Bullseye Tutorial stm32mp157a-dk1	3.0	build_failed	2023-08-27 13:09:28.300824
+2023/10/01 14:51:50 4 /var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b	beaglebone-black	1.0	build_failed	2023-09-03 13:32:59.521000
+2023/10/14 18:17:28 Reading in config config.env
+2023/10/14 18:17:28 elbe bin is located at/hdd/elbe/elbe, default-dl-dir is /home/sta/projects
+2023/10/14 18:17:35 0 /var/cache/elbe/375a58ee-a3f2-4a0f-a0b7-2183a21adcd5	beaglebone-black	1.0	build_done	2023-08-02 07:04:49.758527
+2023/10/14 18:17:35 1 /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146	beaglebone-black	1.0	build_failed	2023-07-31 20:14:48.305520
+2023/10/14 18:17:35 2 /var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7	Bullseye Tutorial stm32mp157a-dk1	3.0	has_changes	2023-08-27 13:01:21.250801
+2023/10/14 18:17:35 3 /var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d	Bullseye Tutorial stm32mp157a-dk1	3.0	build_failed	2023-08-27 13:09:28.300824
+2023/10/14 18:17:35 4 /var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b	beaglebone-black	1.0	build_failed	2023-09-03 13:32:59.521000
+2023/10/14 18:17:50 deleting Bullseye@/var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d
+2023/10/14 18:17:50  /hdd/elbe/elbe control del_project /var/cache/elbe/497eda2c-068a-4bdf-b8ae-0dc05d64984d
+2023/10/14 18:17:52 deleting beaglebone-black@/var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b
+2023/10/14 18:17:52  /hdd/elbe/elbe control del_project /var/cache/elbe/507f0b47-f810-4d20-b965-34fe4310190b
+2023/10/14 18:20:07 getting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:20:44 getting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:21:39 getting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:21:47  /hdd/elbe/elbe control get_files --output ~/download_path /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:22:14 []
+2023/10/14 18:22:14 exit status 5
+2023/10/14 18:22:14 Downloaded to ~/download_path
+2023/10/14 18:22:39 getting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:22:42  /hdd/elbe/elbe control get_files --output ~/download_path /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:22:44 Downloaded to ~/download_path
+2023/10/14 18:24:16 deleting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:24:18 deleting beaglebone-black@/var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:24:18  /hdd/elbe/elbe control del_project /var/cache/elbe/57fc6705-3cb3-47cc-937c-77b1c118c146
+2023/10/14 18:24:21 getting Bullseye@/var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7
+2023/10/14 18:24:23  /hdd/elbe/elbe control get_files --output ~/download_pathrtg /var/cache/elbe/c50d6957-4979-457e-bf31-e96e205ed2e7
+2023/10/14 18:24:23 Downloaded to ~/download_pathrtg

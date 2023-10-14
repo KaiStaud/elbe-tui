@@ -1,6 +1,13 @@
 ## about
 elbe-tui (or as preferred shortenened etui) abstracts away elbe's cumbersome cli interface and (at least) aims to provide
 instead a sructured,keyed and user-friendly "do-it-all in one" application to build debian based rfs images.
+When started, etui list all projects in a color coded way:
+![alt text](https://github.com/KaiStaud/elbe-tui/doc/01-etui_startscreen.png)
+
+As you might already noticed, it also provides keyboard bindings to access the most common tasks. 
+For example r resets a failed project, t deletes it and g downloads files:
+
+![alt text](https://github.com/KaiStaud/elbe-tui/doc/03_reset_prj.webm)
 
 When started etui lists all stored initvm projects, and provides direct access to them via its keybindings.
 The user is recommended to provide a personized config.json file to configure etui, which will provide the working directory whith its structure.
@@ -17,7 +24,9 @@ https://github.com/esiqveland/notify to generate desktop notifications
 - .swu-image generation
 - pre and post build scripts
 - debianization of userspace,kernel and bootloader package source
-
+- pbuilder configuration:
+    - auto generating project
+    - uploading/ building packages
 ## getting started
 clone this repo and build the binary with go build .
 modify config.json and copy it and the directories scripts and templates to /etc/elbe-tui
@@ -38,15 +47,13 @@ help is provided with --help and manpage debian/elbe-tui8.man
 ## clioptions
 
 ## work in progress
-- pbuilder configuration:
-    - auto generating project
-    - uploading/ building packages
+
 - virtualization support
     - docker / podman
     - k8s
     - hawkbit
 - integration with custom mirrors and ppas
-- povide etui as debian package via ppa/ github releases
+- povide etui as snap package / github releases
 - integration with libdbus
     - notification on finished or failed builds
     
