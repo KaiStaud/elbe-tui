@@ -8,7 +8,7 @@ When started, etui list all projects in a color coded way:
 As you might already noticed, it also provides keyboard bindings to access the most common tasks. 
 For example r resets a failed project, t deletes it and g downloads files:
 
-![keybindings](https://github.com/KaiStaud/elbe-tui/blob/main/doc/03_reset_prj.webm)
+![keybindings](https://github.com/KaiStaud/elbe-tui/blob/main/doc/03_reset_prj.gif)
 
 When started etui lists all stored initvm projects, and provides direct access to them via its keybindings.
 The user is recommended to provide a personized config.json file to configure etui, which will provide the working directory whith its structure.
