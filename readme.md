@@ -60,6 +60,7 @@ help is provided with --help and manpage debian/elbe-tui8.man
     
 
 ## future work
+- bmap Image for balena etcher (including Logo )
 - integration w/ qemu for automized image testing
 - web interface
 - drop into C10shell on failure
